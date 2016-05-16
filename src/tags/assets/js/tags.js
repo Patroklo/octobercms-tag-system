@@ -13,10 +13,11 @@
     };
 
     $(document).ready(function () {
-
+console.log('dsf');
         // There is a single instance of the form builder. All operations
         // are stateless, so instance properties or DOM references are not needed.
         $.oc.tagFormField = new TagFormField();
+        
     })
 
 }(window.jQuery);

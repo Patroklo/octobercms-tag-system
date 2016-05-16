@@ -1,4 +1,4 @@
-<?php namespace Patroklo\Webcomic\FormWidgets;
+<?php namespace Patroklo\Tags;
 
 use Backend\Classes\FormWidgetBase;
 
@@ -59,12 +59,13 @@ class Tags extends FormWidgetBase
         $this->vars['allowClear'] = $this->allowClear;
     }
 
+    
     /**
      * {@inheritDoc}
      */
     protected function loadAssets()
     {
-        $this->addJs('/plugins/patroklo/webcomic/formwidgets/tags/assets/js/tags.js');
+        $this->addJs('js/tags.js');
     }
 
 }
