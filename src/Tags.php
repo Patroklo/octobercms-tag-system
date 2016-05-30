@@ -1,7 +1,7 @@
 <?php namespace Patroklo\Tags;
 
 use Backend\Classes\FormWidgetBase;
-
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Tags
@@ -45,27 +45,51 @@ class Tags extends FormWidgetBase
     protected function prepareVars()
     {
         $fieldName = $this->formField->getName();
-        
+
         if (substr($fieldName, -2) != '[]')
         {
-            $fieldName.= '[]';
+            $fieldName .= '[]';
         }
 
         $this->vars['name'] = $fieldName;
 
-        $this->vars['values'] = $this->model->tagNames();
+        $value = $this->getLoadValue();
+
+        // If it's a collection will return
+        // the first fillable element
+        if (is_a($value, Collection::class))
+        {
+            if (!$value->isEmpty())
+            {
+                $first = $value->first();
+
+                $fillable = reset($first->fillable);
+
+                $value = array_pluck($value->toArray(), $fillable);
+            }
+            else
+            {
+                $value = [];
+            }
+
+        }
+
+        if (!is_array($value) and !is_null($value))
+        {
+            throw new \Exception('Field ' . $this->fieldName . ' value must be null or an array.');
+        }
+
+        $this->vars['values'] = $value;
         $this->vars['field'] = $this->formField;
         $this->vars['placeholder'] = $this->placeholder;
         $this->vars['allowClear'] = $this->allowClear;
     }
 
-    
     /**
      * {@inheritDoc}
      */
     protected function loadAssets()
     {
-        $this->addJs('js/tags.js');
+        $this->addJs('/public/js/tags.js');
     }
-
 }
